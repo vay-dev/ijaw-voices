@@ -90,7 +90,7 @@
   font-size: 1.05rem;
   font-weight: 600;
   border: none;
-  border-radius: 999px;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.25s ease;
 
@@ -180,6 +180,120 @@
 
     &:hover {
       text-decoration: underline;
+    }
+  }
+}
+
+// Step transition animations
+.step-container {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.step-hidden {
+  opacity: 0;
+  transform: translateX(-30px);
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+}
+
+.step-visible {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+  position: relative;
+}
+
+// Back button
+.back-button {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: #333;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #000;
+    transform: translateX(-3px);
+  }
+
+  @media (max-width: 767px) {
+    top: 1rem;
+    left: 0.5rem;
+  }
+}
+
+// Error message styles
+.error-message {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #dc2626;
+  font-weight: 500;
+  animation: slideDown 0.3s ease;
+
+  span {
+    display: block;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Error input styling
+.form-input-error {
+  border-color: #dc2626 !important;
+
+  &:focus {
+    border-color: #dc2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  }
+}
+
+// Password input wrapper
+.password-input-wrapper {
+  position: relative;
+
+  .form-input {
+    padding-right: 3rem;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #777;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #333;
+    }
+
+    i {
+      font-size: 1rem;
     }
   }
 }
