@@ -7,5 +7,15 @@ import { Component } from '@angular/core';
   styleUrl: './signup.scss',
 })
 export class Signup {
+  signUpWithGoogle(): void {
+    console.log('Sign up with Google');
+  }
 
+  signUpWithFacebook(): void {
+    console.log('Sign up with Facebook');
+  }
+
+  onSubmit(): void {
+    console.log('Signup form submitted');
+  }
 }

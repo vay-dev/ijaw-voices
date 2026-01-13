@@ -1,1 +1,45 @@
-<p>onboarding works!</p>
+<div class="onboarding">
+  <div class="onboarding-card">
+    <div class="carousel-container">
+      <div class="slide" *ngIf="currentStep === 0" [@slideAnimation]="currentStep">
+        <h1 class="splash__h1">Bring Ijaw to Life</h1>
+        <p class="splash__p">Build confidence in your mother tongue with bite-sized lessons.</p>
+        <img class="splash__image" src="images/splash1.png" alt="Couple in traditional attire" />
+      </div>
+
+      <div class="slide" *ngIf="currentStep === 1" [@slideAnimation]="currentStep">
+        <!-- Onboarding 2 content -->
+        <h1 class="splash__h1">Choose Your Dialect</h1>
+        <p class="splash__p">Kalabari, Nembe, Izon — learn in the variety you connect with most.</p>
+        <img class="splash__image" src="images/splash2.png" alt="Couple in traditional attire" />
+      </div>
+
+      <div class="slide" *ngIf="currentStep === 2" [@slideAnimation]="currentStep">
+        <!-- Onboarding 3 content + Register/Login button -->
+        <h1 class="splash__h1">Practice & Grow</h1>
+        <p class="splash__p">
+          Speak with confidence, test your knowledge, and track your progress.
+        </p>
+        <img class="splash__image" src="images/splash3.png" alt="Couple in traditional attire" />
+      </div>
+    </div>
+
+    <div class="bottom-section">
+      <div class="dots">
+        <span *ngFor="let s of steps" [class.active]="s === currentStep"></span>
+      </div>
+      <div class="buttons" [class.single-button]="currentStep !== 2">
+        <button
+          *ngIf="currentStep === 2"
+          class="splash__button splash__button--secondary"
+          (click)="register()"
+        >
+          Register
+        </button>
+        <button class="splash__button" (click)="loginOrNext()">
+          {{ currentStep === 2 ? 'Login' : 'Next' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
