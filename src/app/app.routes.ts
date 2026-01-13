@@ -5,11 +5,11 @@ export const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
   {
     path: 'auth',
-    loadChildren: () => import('./auth/auth-module').then((m) => m.AuthModule),
+    loadChildren: () => import('./pages/auth/auth-module').then((m) => m.AuthModule),
   },
   {
     path: 'home',
     canActivate: [authGuard],
-    loadChildren: () => import('./home/home-module').then((m) => m.HomeModule),
+    loadChildren: () => import('./pages/home/home-module').then((m) => m.HomeModule),
   },
 ];
