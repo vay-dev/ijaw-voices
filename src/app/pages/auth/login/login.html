@@ -3,7 +3,7 @@
     <h1 class="signup__title">Welcome Back to <span class="highlight">Ijaw Voices!</span> 🥳</h1>
     <p class="signup__subtitle">Login to your existing account</p>
 
-    <form class="signup-form" (ngSubmit)="onSubmit()">
+    <form class="signup-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <!--============ form group ===============-->
       <div class="form-group">
         <label for="email" class="form-label">Email</label>
@@ -29,7 +29,11 @@
         />
       </div>
 
-      <button type="submit" class="btn btn-primary">Login</button>
+      <button type="submit" class="btn btn-primary">
+        @if (isLoading()) {
+        <i class="fa-solid fa-spinner rotate"></i>
+        } @else { Login }
+      </button>
     </form>
 
     <div class="divider">

@@ -1,0 +1,37 @@
+<div class="sidebar-container">
+  <!-- Logo/Brand -->
+  <div class="sidebar-header">
+    <div class="logo">
+      <!-- nav logo con -->
+      <div class="logo-icon">
+        <!-- nav logo img -->
+        <img src="app-logos/android-chrome-192x192.png" alt="" />
+      </div>
+      <span class="logo-text">Ijaw Voices</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      @for (item of navItems; track $index) {
+
+      <li
+        class="nav-item"
+        [class.active]="isActiveRoute(item.route)"
+        (click)="navigate(item.route)"
+      >
+        <div class="nav-icon">
+          <app-svg [name]="item.icon" />
+        </div>
+        <span class="nav-label">{{ item.label }}</span>
+      </li>
+      }
+    </ul>
+  </nav>
+
+  <!-- Footer (optional - can add version, help, etc) -->
+  <div class="sidebar-footer">
+    <p class="version-text">v1.0.0</p>
+  </div>
+</div>
