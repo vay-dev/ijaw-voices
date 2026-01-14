@@ -17,14 +17,14 @@
   --font-bold: 700;
 
   // Font sizes
-  --text-xs: 0.75rem;   // 12px
-  --text-sm: 0.875rem;  // 14px
-  --text-base: 1rem;    // 16px
-  --text-lg: 1.125rem;  // 18px
-  --text-xl: 1.25rem;   // 20px
-  --text-2xl: 1.5rem;   // 24px
+  --text-xs: 0.75rem; // 12px
+  --text-sm: 0.875rem; // 14px
+  --text-base: 1rem; // 16px
+  --text-lg: 1.125rem; // 18px
+  --text-xl: 1.25rem; // 20px
+  --text-2xl: 1.5rem; // 24px
   --text-3xl: 1.875rem; // 30px
-  --text-4xl: 2.25rem;  // 36px
+  --text-4xl: 2.25rem; // 36px
 }
 
 data[theme='dark'] {
@@ -38,4 +38,20 @@ body {
   height: 100vh;
   background: #f8f9fa;
   color: var(--text-color);
+}
+
+.rotate {
+  animation: rotate 3s linear infinite;
+
+  & {
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
 }

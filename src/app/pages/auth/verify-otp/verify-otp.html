@@ -4,9 +4,7 @@
       <i class="fas fa-arrow-left"></i>
     </button>
 
-    <h1 class="verify__title">
-      Let's not forget verification! 🤩
-    </h1>
+    <h1 class="verify__title">Let's not forget verification! 🤩</h1>
     <p class="verify__subtitle">Let's get you verified</p>
 
     <form class="verify-form" (ngSubmit)="verifyOtp()">
@@ -99,7 +97,11 @@
         </span>
       </div>
 
-      <button type="submit" class="btn btn-primary">Verify</button>
+      <button type="submit" class="btn btn-primary">
+        @if (isLoading()) {
+        <i class="fa-solid fa-spinner rotate"></i>
+        } @else { Verify }
+      </button>
     </form>
   </div>
 </div>

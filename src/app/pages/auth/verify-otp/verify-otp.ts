@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
+import { VerifyOtpResponseInterface } from '../../../interfaces/auth/verifyotp-response.interface';
 
 @Component({
   selector: 'app-verify-otp',
@@ -13,8 +16,9 @@ export class VerifyOtp {
   errorMessage = '';
   countdown = 20;
   private countdownInterval: any;
+  isLoading = signal<boolean>(false);
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.otpForm = this.fb.group({
       otp1: ['', [Validators.required, Validators.pattern(/^\d$/)]],
       otp2: ['', [Validators.required, Validators.pattern(/^\d$/)]],
@@ -105,31 +109,55 @@ export class VerifyOtp {
   }
 
   verifyOtp(): void {
+    this.isLoading.set(true);
     const otpCode = this.otpInputs.join('');
     if (otpCode.length === 6) {
       console.log('OTP Code:', otpCode);
 
-      // Simulate verification (replace with actual API call)
-      // For demo purposes, any 6-digit code except '532409' is valid
-      if (otpCode === '532409') {
-        this.errorMessage = 'Wrong code, please try again';
-        // Clear inputs on error
-        this.otpInputs = ['', '', '', '', '', ''];
-        for (let i = 1; i <= 6; i++) {
-          const input = document.getElementById(`otp-${i}`) as HTMLInputElement;
-          if (input) {
-            input.value = '';
-          }
-        }
-        // Focus first input
-        const firstInput = document.getElementById('otp-1');
-        if (firstInput) {
-          (firstInput as HTMLInputElement).focus();
-        }
-      } else {
-        // Success - navigate to next page or show success message
-        console.log('OTP Verified Successfully!');
+      const userId = history.state.userId || localStorage.getItem('pendingUserId');
+      if (!userId) {
+        this.errorMessage = 'User ID not found. Please sign up again.';
+        this.isLoading.set(false);
+        return;
       }
+
+      const payload = {
+        user_id: userId,
+        code: otpCode,
+      };
+
+      this.authService.verifyOtp(payload).subscribe({
+        next: (response: VerifyOtpResponseInterface) => {
+          console.log('✅ OTP verification successful:', response);
+          localStorage.removeItem('pendingUserId');
+          this.authService.setTokensAndUser(
+            response.accessToken,
+            response.refreshToken,
+            response.user
+          );
+          this.isLoading.set(false);
+          this.router.navigate(['/home']);
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          console.error('❌ OTP verification failed:', err);
+          this.errorMessage = 'Invalid OTP code. Please try again.';
+
+          // Clear inputs on error
+          this.otpInputs = ['', '', '', '', '', ''];
+          for (let i = 1; i <= 6; i++) {
+            const input = document.getElementById(`otp-${i}`) as HTMLInputElement;
+            if (input) {
+              input.value = '';
+            }
+          }
+
+          const firstInput = document.getElementById('otp-1');
+          if (firstInput) {
+            (firstInput as HTMLInputElement).focus();
+          }
+        },
+      });
     }
   }
 

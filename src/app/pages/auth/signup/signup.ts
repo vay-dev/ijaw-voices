@@ -1,5 +1,14 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Component, signal } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
+import { SignupResponseInterface } from '../../../interfaces/auth/signup-response.interface';
 
 @Component({
   selector: 'app-signup',
@@ -12,15 +21,19 @@ export class Signup {
   currentStep = 1;
   showPassword = false;
   showConfirmPassword = false;
+  isLoading = signal<boolean>(false);
 
-  constructor(private fb: FormBuilder) {
-    this.signUpForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
-      confirmPassword: ['', [Validators.required]],
-    }, { validators: this.passwordMatchValidator });
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+    this.signUpForm = this.fb.group(
+      {
+        email: ['', [Validators.required, Validators.email]],
+        firstName: ['', [Validators.required]],
+        lastName: ['', [Validators.required]],
+        password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      { validators: this.passwordMatchValidator }
+    );
   }
 
   // Custom validator for password strength
@@ -68,11 +81,34 @@ export class Signup {
   }
 
   onSubmit(): void {
+    this.isLoading.set(true);
     if (this.signUpForm.valid) {
-      console.log('Form Values:', this.signUpForm.value);
+      // Build the exact payload the backend expects
+      const payload = {
+        email: this.signUpForm.get('email')?.value.trim(),
+        password: this.signUpForm.get('password')?.value,
+        first_name: this.signUpForm.get('firstName')?.value.trim(),
+        last_name: this.signUpForm.get('lastName')?.value.trim(),
+        // avatar_id: null,   // optional — add later if you have avatar upload/picker
+      };
+
+      // Optional: log to verify what we're sending
+
+      this.authService.register(payload).subscribe({
+        next: (response: SignupResponseInterface) => {
+          console.log('Registration successful:', response);
+          localStorage.setItem('pendingUserId', response.userId);
+          this.isLoading.set(false);
+          this.router.navigate(['/auth/verify-otp'], { state: { userId: response.userId } });
+        },
+        error: (err: SignupResponseInterface) => {
+          console.error('Registration failed:', err);
+          this.isLoading.set(false);
+        },
+      });
     } else {
-      // Mark all fields as touched to show validation errors
-      Object.keys(this.signUpForm.controls).forEach(key => {
+      // Mark all fields touched to show errors
+      Object.keys(this.signUpForm.controls).forEach((key) => {
         this.signUpForm.get(key)?.markAsTouched();
       });
     }

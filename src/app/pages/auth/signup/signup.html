@@ -1,7 +1,11 @@
 <div class="signup-page">
   <div class="signup-card">
     <!-- Step 1: Email Input -->
-    <div class="step-container" [class.step-hidden]="currentStep !== 1" [class.step-visible]="currentStep === 1">
+    <div
+      class="step-container"
+      [class.step-hidden]="currentStep !== 1"
+      [class.step-visible]="currentStep === 1"
+    >
       <button type="button" class="back-button" *ngIf="currentStep === 2" (click)="goBack()">
         <i class="fas fa-arrow-left"></i>
       </button>
@@ -18,13 +22,20 @@
             type="email"
             id="email"
             class="form-input"
-            [class.form-input-error]="signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched"
+            [class.form-input-error]="
+              signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched
+            "
             placeholder="Enter your email"
             formControlName="email"
           />
-          <div class="error-message" *ngIf="signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched">
+          <div
+            class="error-message"
+            *ngIf="signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched"
+          >
             <span *ngIf="signUpForm.get('email')?.errors?.['required']">Email is required</span>
-            <span *ngIf="signUpForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+            <span *ngIf="signUpForm.get('email')?.errors?.['email']"
+              >Please enter a valid email</span
+            >
           </div>
         </div>
 
@@ -55,7 +66,11 @@
     </div>
 
     <!-- Step 2: Full Registration Form -->
-    <div class="step-container" [class.step-hidden]="currentStep !== 2" [class.step-visible]="currentStep === 2">
+    <div
+      class="step-container"
+      [class.step-hidden]="currentStep !== 2"
+      [class.step-visible]="currentStep === 2"
+    >
       <button type="button" class="back-button" (click)="goBack()">
         <i class="fas fa-arrow-left"></i>
       </button>
@@ -72,12 +87,19 @@
             type="text"
             id="firstName"
             class="form-input"
-            [class.form-input-error]="signUpForm.get('firstName')?.invalid && signUpForm.get('firstName')?.touched"
+            [class.form-input-error]="
+              signUpForm.get('firstName')?.invalid && signUpForm.get('firstName')?.touched
+            "
             placeholder="Enter your first name"
             formControlName="firstName"
           />
-          <div class="error-message" *ngIf="signUpForm.get('firstName')?.invalid && signUpForm.get('firstName')?.touched">
-            <span *ngIf="signUpForm.get('firstName')?.errors?.['required']">First name is required</span>
+          <div
+            class="error-message"
+            *ngIf="signUpForm.get('firstName')?.invalid && signUpForm.get('firstName')?.touched"
+          >
+            <span *ngIf="signUpForm.get('firstName')?.errors?.['required']"
+              >First name is required</span
+            >
           </div>
         </div>
 
@@ -87,12 +109,19 @@
             type="text"
             id="lastName"
             class="form-input"
-            [class.form-input-error]="signUpForm.get('lastName')?.invalid && signUpForm.get('lastName')?.touched"
+            [class.form-input-error]="
+              signUpForm.get('lastName')?.invalid && signUpForm.get('lastName')?.touched
+            "
             placeholder="Enter your last name"
             formControlName="lastName"
           />
-          <div class="error-message" *ngIf="signUpForm.get('lastName')?.invalid && signUpForm.get('lastName')?.touched">
-            <span *ngIf="signUpForm.get('lastName')?.errors?.['required']">Last name is required</span>
+          <div
+            class="error-message"
+            *ngIf="signUpForm.get('lastName')?.invalid && signUpForm.get('lastName')?.touched"
+          >
+            <span *ngIf="signUpForm.get('lastName')?.errors?.['required']"
+              >Last name is required</span
+            >
           </div>
         </div>
 
@@ -103,7 +132,9 @@
               [type]="showPassword ? 'text' : 'password'"
               id="password"
               class="form-input"
-              [class.form-input-error]="signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched"
+              [class.form-input-error]="
+                signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched
+              "
               placeholder="Create password"
               formControlName="password"
             />
@@ -111,8 +142,13 @@
               <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
             </button>
           </div>
-          <div class="error-message" *ngIf="signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched">
-            <span *ngIf="signUpForm.get('password')?.errors?.['required']">Password is required</span>
+          <div
+            class="error-message"
+            *ngIf="signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched"
+          >
+            <span *ngIf="signUpForm.get('password')?.errors?.['required']"
+              >Password is required</span
+            >
             <span *ngIf="signUpForm.get('password')?.errors?.['passwordStrength']">
               Password must be at least 6 characters with 1 uppercase letter and 1 special character
             </span>
@@ -130,19 +166,31 @@
               placeholder="Confirm password"
               formControlName="confirmPassword"
             />
-            <button type="button" class="toggle-password" (click)="toggleConfirmPasswordVisibility()">
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="toggleConfirmPasswordVisibility()"
+            >
               <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
             </button>
           </div>
           <div class="error-message" *ngIf="signUpForm.get('confirmPassword')?.touched">
-            <span *ngIf="signUpForm.get('confirmPassword')?.errors?.['required']">Please confirm your password</span>
-            <span *ngIf="signUpForm.errors?.['passwordMismatch'] && !signUpForm.get('confirmPassword')?.errors?.['required']">
+            <span *ngIf="signUpForm.get('confirmPassword')?.errors?.['required']"
+              >Please confirm your password</span
+            >
+            <span
+              *ngIf="signUpForm.errors?.['passwordMismatch'] && !signUpForm.get('confirmPassword')?.errors?.['required']"
+            >
               Passwords do not match
             </span>
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="submit" class="btn btn-primary">
+          @if (isLoading()) {
+          <i class="fa-solid fa-spinner rotate"></i>
+          } @else { Register }
+        </button>
       </form>
 
       <p class="login-link mt-3">

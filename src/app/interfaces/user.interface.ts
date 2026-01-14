@@ -6,20 +6,20 @@ export interface User {
   email: string;
 
   /** REQUIRED */
-  firstName: string;
+  first_name: string;
 
   /** REQUIRED */
-  lastName: string;
+  last_name: string;
 
   /** OPTIONAL — provided by frontend, backend just stores it */
-  avatarId?: string | null;
+  avatar_id?: string | null;
 
   /** REQUIRED — used for OTP / email verification */
-  isVerified: boolean;
+  is_verified: boolean;
 
   /** System-generated */
-  createdAt: Date;
+  created_at: Date;
 
   /** System-generated */
-  updatedAt: Date;
+  updated_at: Date;
 }
