@@ -1,4 +1,4 @@
 export const Environment = {
   production: true,
-  baseUrl: 'http://ijaw-voices.duckdns.org/api',
+  baseUrl: 'https://ijaw-voices.duckdns.org/api',
 };
