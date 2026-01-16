@@ -1,0 +1,73 @@
+<div class="signup-page">
+  <div class="signup-card">
+    <h1 class="signup__title">Welcome Back to <span class="highlight">Ijaw Voices!</span> 🥳</h1>
+    <p class="signup__subtitle">Login to your existing account</p>
+
+    <form class="signup-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!--============ form group ===============-->
+      <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input
+          type="email"
+          id="email"
+          class="form-input"
+          [class.form-input-error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          placeholder="Enter your email"
+          formControlName="email"
+          required
+        />
+        <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+        </div>
+      </div>
+      <!--============ form group ===============-->
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          id="password"
+          class="form-input"
+          [class.form-input-error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          placeholder="Enter your password"
+          formControlName="password"
+          required
+        />
+        <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+          <span *ngIf="loginForm.get('password')?.errors?.['passwordStrength']">
+            Password must be at least 6 characters with 1 uppercase letter and 1 special character
+          </span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="isLoading() || loginForm.invalid">
+        @if (isLoading()) {
+        <i class="fa-solid fa-spinner rotate"></i>
+        } @else { Login }
+      </button>
+    </form>
+
+    <div class="divider">
+      <span>Or Login With</span>
+    </div>
+
+    <div class="social-buttons">
+      <!-- Google Button -->
+      <button type="button" class="btn btn-google" (click)="signUpWithGoogle()">
+        <img src="images/google.png" alt="google logo" class="social-icon--image" />
+        Login with Google
+      </button>
+
+      <!-- Facebook Button -->
+      <button type="button" class="btn btn-facebook" (click)="signUpWithFacebook()">
+        <i class="fab fa-facebook-f social-icon"></i>
+        Login with Facebook
+      </button>
+    </div>
+
+    <p class="login-link mt-3">
+      Don't have an account? <a routerLink="/auth/signup" class="link">Signup</a>
+    </p>
+  </div>
+</div>

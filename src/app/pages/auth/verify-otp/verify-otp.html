@@ -1,0 +1,107 @@
+<div class="verify-page">
+  <div class="verify-card">
+    <button type="button" class="back-button" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+
+    <h1 class="verify__title">Let's not forget verification! 🤩</h1>
+    <p class="verify__subtitle">Let's get you verified</p>
+
+    <form class="verify-form" (ngSubmit)="verifyOtp()">
+      <div class="otp-container">
+        <input
+          type="tel"
+          id="otp-1"
+          class="otp-input"
+          [class.otp-input-error]="errorMessage"
+          maxlength="1"
+          pattern="\d"
+          (input)="onOtpInput($event, 0)"
+          (keydown)="onOtpKeyDown($event, 0)"
+          (paste)="onOtpPaste($event)"
+          autocomplete="off"
+        />
+        <input
+          type="tel"
+          id="otp-2"
+          class="otp-input"
+          [class.otp-input-error]="errorMessage"
+          maxlength="1"
+          pattern="\d"
+          (input)="onOtpInput($event, 1)"
+          (keydown)="onOtpKeyDown($event, 1)"
+          autocomplete="off"
+        />
+        <input
+          type="tel"
+          id="otp-3"
+          class="otp-input"
+          [class.otp-input-error]="errorMessage"
+          maxlength="1"
+          pattern="\d"
+          (input)="onOtpInput($event, 2)"
+          (keydown)="onOtpKeyDown($event, 2)"
+          autocomplete="off"
+        />
+        <input
+          type="tel"
+          id="otp-4"
+          class="otp-input"
+          [class.otp-input-error]="errorMessage"
+          maxlength="1"
+          pattern="\d"
+          (input)="onOtpInput($event, 3)"
+          (keydown)="onOtpKeyDown($event, 3)"
+          autocomplete="off"
+        />
+        <input
+          type="tel"
+          id="otp-5"
+          class="otp-input"
+          [class.otp-input-error]="errorMessage"
+          maxlength="1"
+          pattern="\d"
+          (input)="onOtpInput($event, 4)"
+          (keydown)="onOtpKeyDown($event, 4)"
+          autocomplete="off"
+        />
+        <input
+          type="tel"
+          id="otp-6"
+          class="otp-input"
+          [class.otp-input-error]="errorMessage"
+          maxlength="1"
+          pattern="\d"
+          (input)="onOtpInput($event, 5)"
+          (keydown)="onOtpKeyDown($event, 5)"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <div class="resend-section">
+        <button
+          type="button"
+          class="resend-button"
+          [class.disabled]="countdown > 0"
+          (click)="resendCode()"
+        >
+          <span *ngIf="countdown > 0">Send code again</span>
+          <span *ngIf="countdown <= 0">Resend</span>
+        </button>
+        <span class="countdown" *ngIf="countdown > 0">
+          00:{{ countdown < 10 ? '0' + countdown : countdown }}
+        </span>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+        @if (isLoading()) {
+        <i class="fa-solid fa-spinner rotate"></i>
+        } @else { Verify }
+      </button>
+    </form>
+  </div>
+</div>

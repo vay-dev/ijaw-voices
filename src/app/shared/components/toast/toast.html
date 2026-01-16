@@ -1,0 +1,15 @@
+<div class="toast-container">
+  @for (toast of toasts; track toast.id) {
+    <div
+      class="toast toast-{{ toast.type }}"
+      [class.toast-leaving]="toast.isLeaving"
+      (click)="startRemoveToast(toast.id)">
+      <div class="toast-icon">
+        <i [class]="getIcon(toast.type)"></i>
+      </div>
+      <div class="toast-content">
+        <div class="toast-message">{{ toast.message }}</div>
+      </div>
+    </div>
+  }
+</div>

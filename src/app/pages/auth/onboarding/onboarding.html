@@ -1,0 +1,44 @@
+<div class="onboarding">
+  <div class="onboarding-card">
+    <div
+      class="carousel-container"
+      #carousel
+      (touchstart)="onTouchStart($event)"
+      (touchend)="onTouchEnd($event)"
+    >
+      <div class="carousel-track" [style.transform]="'translateX(-' + (currentStep * 100) + '%)'">
+        <div class="slide" *ngFor="let slide of slides">
+          <h1 class="splash__h1">{{ slide.title }}</h1>
+          <p class="splash__p">{{ slide.description }}</p>
+          <img
+            class="splash__image"
+            [src]="slide.image"
+            [alt]="slide.alt"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-section">
+      <div class="dots">
+        <span
+          *ngFor="let s of steps"
+          [class.active]="s === currentStep"
+          (click)="goToSlide(s)"
+        ></span>
+      </div>
+      <div class="buttons" [class.single-button]="currentStep !== 2">
+        <button
+          *ngIf="currentStep === 2"
+          class="splash__button splash__button--secondary"
+          (click)="register()"
+        >
+          Register
+        </button>
+        <button class="splash__button" (click)="loginOrNext()">
+          {{ currentStep === 2 ? 'Login' : 'Next' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
