@@ -1,7 +1,4 @@
-// onboarding.component.scss
-
 .onboarding {
-  // Full-screen feel, center everything
   min-height: 100%;
   display: flex;
   justify-content: center;
@@ -11,7 +8,6 @@
   text-align: center;
   overflow: hidden;
 
-  // Card container for desktop, full screen on mobile
   .onboarding-card {
     width: 100%;
     height: 100vh;
@@ -23,7 +19,6 @@
     box-shadow: none;
     overflow: hidden;
 
-    // Desktop: compact card with scrollable content
     @media (min-width: 768px) {
       max-width: 440px;
       max-height: 700px;
@@ -35,50 +30,36 @@
 
   .carousel-container {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
     width: 100%;
     position: relative;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 2rem 1.5rem 1rem;
+    overflow: hidden;
+    padding: 0;
+  }
 
-    // Custom scrollbar for webkit browsers
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: #d1d5db;
-      border-radius: 3px;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-      background: #9ca3af;
-    }
+  .carousel-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .slide {
+    min-width: 100%;
     width: 100%;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     gap: 1.2rem;
-    padding: 0;
-    min-height: 100%;
+    padding: 2rem 1.5rem 1rem;
+    box-sizing: border-box;
+    overflow: hidden;
 
     @media (min-width: 768px) {
       gap: 1.5rem;
     }
 
-    // Splash title
     .splash__h1 {
       font-size: 1.5rem;
       font-weight: 700;
@@ -91,7 +72,6 @@
       }
     }
 
-    // Subtitle / description
     .splash__p {
       font-size: 0.95rem;
       line-height: 1.5;
@@ -104,7 +84,6 @@
       }
     }
 
-    // Image container / image
     .splash__image {
       width: 100%;
       max-width: 280px;
@@ -121,7 +100,6 @@
     }
   }
 
-  // Bottom section with dots and button (fixed)
   .bottom-section {
     width: 100%;
     display: flex;
@@ -136,7 +114,6 @@
       padding: 1.5rem 2rem;
     }
 
-    // Progress dots
     .dots {
       display: flex;
       gap: 0.8rem;
@@ -148,6 +125,11 @@
         background: #d1d5db;
         border-radius: 50%;
         transition: background 0.3s ease, transform 0.3s ease;
+        cursor: pointer;
+
+        &:hover {
+          background: #9ca3af;
+        }
 
         &.active {
           background: #000;
@@ -156,7 +138,6 @@
       }
     }
 
-    // Button container
     .buttons {
       display: flex;
       gap: 0.75rem;
@@ -169,7 +150,6 @@
       }
     }
 
-    // Main button (Next/Login)
     .splash__button {
       flex: 1;
       padding: 0.875rem 1.5rem;
@@ -195,7 +175,6 @@
         transform: scale(0.98);
       }
 
-      // Secondary button (Register)
       &--secondary {
         background: white;
         color: #000;

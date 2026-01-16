@@ -11,25 +11,37 @@
           type="email"
           id="email"
           class="form-input"
+          [class.form-input-error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
           placeholder="Enter your email"
           formControlName="email"
           required
         />
+        <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+        </div>
       </div>
       <!--============ form group ===============-->
       <div class="form-group">
-        <label for="password" class="form-label">password</label>
+        <label for="password" class="form-label">Password</label>
         <input
           type="password"
           id="password"
           class="form-input"
+          [class.form-input-error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
           placeholder="Enter your password"
           formControlName="password"
           required
         />
+        <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+          <span *ngIf="loginForm.get('password')?.errors?.['passwordStrength']">
+            Password must be at least 6 characters with 1 uppercase letter and 1 special character
+          </span>
+        </div>
       </div>
 
-      <button type="submit" class="btn btn-primary">
+      <button type="submit" class="btn btn-primary" [disabled]="isLoading() || loginForm.invalid">
         @if (isLoading()) {
         <i class="fa-solid fa-spinner rotate"></i>
         } @else { Login }

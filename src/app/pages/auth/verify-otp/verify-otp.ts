@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { VerifyOtpResponseInterface } from '../../../interfaces/auth/verifyotp-response.interface';
+import { ToastService } from '../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-verify-otp',
@@ -18,7 +19,12 @@ export class VerifyOtp {
   private countdownInterval: any;
   isLoading = signal<boolean>(false);
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private toastServie: ToastService
+  ) {
     this.otpForm = this.fb.group({
       otp1: ['', [Validators.required, Validators.pattern(/^\d$/)]],
       otp2: ['', [Validators.required, Validators.pattern(/^\d$/)]],
@@ -128,7 +134,7 @@ export class VerifyOtp {
 
       this.authService.verifyOtp(payload).subscribe({
         next: (response: VerifyOtpResponseInterface) => {
-          console.log('✅ OTP verification successful:', response);
+          this.toastServie.success('OTP verification successful');
           localStorage.removeItem('pendingUserId');
           this.authService.setTokensAndUser(
             response.accessToken,
@@ -141,7 +147,7 @@ export class VerifyOtp {
         error: (err) => {
           this.isLoading.set(false);
           console.error('❌ OTP verification failed:', err);
-          this.errorMessage = 'Invalid OTP code. Please try again.';
+          this.handleError(err);
 
           // Clear inputs on error
           this.otpInputs = ['', '', '', '', '', ''];
@@ -184,6 +190,27 @@ export class VerifyOtp {
   ngOnDestroy(): void {
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
+    }
+  }
+
+  private handleError(err: any): void {
+    if (err.status === 429) {
+      const detail = err.error?.detail || '';
+      const match = detail.match(/(\d+)\s+seconds/);
+      if (match) {
+        const seconds = parseInt(match[1]);
+        const minutes = Math.ceil(seconds / 60);
+        this.toastServie.error(
+          `Too many requests. Please try again in ${minutes} minute${minutes > 1 ? 's' : ''}.`
+        );
+        this.errorMessage = `Rate limited. Try again in ${minutes} minute${minutes > 1 ? 's' : ''}.`;
+      } else {
+        this.toastServie.error('Too many requests. Please try again later.');
+        this.errorMessage = 'Too many attempts. Please wait.';
+      }
+    } else {
+      this.toastServie.error(err.error?.message || 'Invalid OTP code. Please try again.');
+      this.errorMessage = 'Invalid OTP code. Please try again.';
     }
   }
 }

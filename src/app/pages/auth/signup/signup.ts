@@ -9,6 +9,7 @@ import {
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { SignupResponseInterface } from '../../../interfaces/auth/signup-response.interface';
+import { ToastService } from '../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-signup',
@@ -23,7 +24,12 @@ export class Signup {
   showConfirmPassword = false;
   isLoading = signal<boolean>(false);
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private toastService: ToastService
+  ) {
     this.signUpForm = this.fb.group(
       {
         email: ['', [Validators.required, Validators.email]],
@@ -96,17 +102,20 @@ export class Signup {
 
       this.authService.register(payload).subscribe({
         next: (response: SignupResponseInterface) => {
-          console.log('Registration successful:', response);
           localStorage.setItem('pendingUserId', response.userId);
           this.isLoading.set(false);
+          this.toastService.success(
+            response.message || 'Registration successful! Please verify your email.'
+          );
           this.router.navigate(['/auth/verify-otp'], { state: { userId: response.userId } });
         },
-        error: (err: SignupResponseInterface) => {
-          console.error('Registration failed:', err);
+        error: (err: any) => {
           this.isLoading.set(false);
+          this.handleError(err);
         },
       });
     } else {
+      this.isLoading.set(false);
       // Mark all fields touched to show errors
       Object.keys(this.signUpForm.controls).forEach((key) => {
         this.signUpForm.get(key)?.markAsTouched();
@@ -124,5 +133,23 @@ export class Signup {
 
   toggleConfirmPasswordVisibility(): void {
     this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  private handleError(err: any): void {
+    if (err.status === 429) {
+      const detail = err.error?.detail || '';
+      const match = detail.match(/(\d+)\s+seconds/);
+      if (match) {
+        const seconds = parseInt(match[1]);
+        const minutes = Math.ceil(seconds / 60);
+        this.toastService.error(
+          `Too many requests. Please try again in ${minutes} minute${minutes > 1 ? 's' : ''}.`
+        );
+      } else {
+        this.toastService.error('Too many requests. Please try again later.');
+      }
+    } else {
+      this.toastService.error(err.error?.message || 'Registration failed. Please try again.');
+    }
   }
 }

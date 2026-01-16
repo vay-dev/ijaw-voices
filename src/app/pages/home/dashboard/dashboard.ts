@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../../../interfaces/user.interface';
+import { UserInterface } from '../../../interfaces/user.interface';
 
 interface LessonCard {
   id: string;
@@ -21,7 +21,7 @@ interface StreakDay {
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
-  user: User | null = null;
+  user: UserInterface | null = null;
   currentStreak = 15;
   streakDays: StreakDay[] = [
     { day: 'Mon', completed: true },

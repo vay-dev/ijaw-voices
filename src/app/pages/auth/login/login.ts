@@ -9,6 +9,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { LoginRequestInterface } from '../../../interfaces/auth/login-request.interface';
+import { ToastService } from '../../../shared/components/toast/toast.service';
+import { LoginResponseInterface } from '../../../interfaces/auth/login-response.interface';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +22,12 @@ export class Login {
   loginForm: FormGroup;
   isLoading = signal<boolean>(false);
 
-  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private fb: FormBuilder,
+    private toastService: ToastService
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
@@ -63,21 +70,47 @@ export class Login {
       // Optional: log to verify what we're sending
 
       this.authService.login(payload).subscribe({
-        next: (response: LoginRequestInterface) => {
+        next: (response: LoginResponseInterface) => {
           console.log('Login successful:', response);
           this.isLoading.set(false);
+          this.toastService.success('Login successful!');
           this.router.navigate(['/home']);
+          this.authService.setTokensAndUser(
+            response.accessToken,
+            response.refreshToken,
+            response.user
+          );
         },
         error: (err: any) => {
           console.error('Login failed:', err);
           this.isLoading.set(false);
+          this.handleError(err);
         },
       });
     } else {
+      this.isLoading.set(false);
       // Mark all fields touched to show errors
       Object.keys(this.loginForm.controls).forEach((key) => {
         this.loginForm.get(key)?.markAsTouched();
       });
+    }
+  }
+
+  private handleError(err: any): void {
+    if (err.status === 429) {
+      const detail = err.error?.detail || '';
+      const match = detail.match(/(\d+)\s+seconds/);
+      if (match) {
+        const seconds = parseInt(match[1]);
+        const minutes = Math.ceil(seconds / 60);
+        this.toastService.error(
+          `Too many requests. Please try again in ${minutes} minute${minutes > 1 ? 's' : ''}.`
+        );
+      } else {
+        this.toastService.error('Too many requests. Please try again later.');
+      }
+    } else {
+      this.toastService.error(err.error?.message || 'Login failed. Please try again.');
     }
   }
 }

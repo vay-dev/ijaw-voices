@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '../../../interfaces/user.interface';
+import { UserInterface } from '../../../interfaces/user.interface';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { AuthService } from '../../../services/auth.service';
   styleUrl: './profile.scss',
 })
 export class Profile implements OnInit {
-  user: User | null = null;
+  user: UserInterface | null = null;
   isLoggingOut = signal<boolean>(false);
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -36,14 +36,18 @@ export class Profile implements OnInit {
     const refreshToken = this.authService.getRefreshToken();
     if (!refreshToken) {
       console.error('No refresh token found. Redirecting to login.');
-      this.clearStorageAndRedirect();
+      setTimeout(() => {
+        this.clearStorageAndRedirect();
+      }, 2000);
       return;
     }
     // Call logout API
     this.authService.logout(refreshToken).subscribe({
       next: () => {
         console.log('✅ Logout successful');
-        this.clearStorageAndRedirect();
+        setTimeout(() => {
+          this.clearStorageAndRedirect();
+        }, 2000);
       },
       error: (err) => {
         console.error('❌ Logout failed:', err);

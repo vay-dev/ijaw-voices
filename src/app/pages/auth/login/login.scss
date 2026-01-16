@@ -82,6 +82,16 @@
   &:focus {
     border-color: #000;
   }
+
+  &.form-input-error {
+    border-color: #ef4444;
+  }
+}
+
+.error-message {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #ef4444;
 }
 
 .btn {
@@ -103,8 +113,14 @@
   background: #000;
   color: white;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: #222;
+  }
+
+  &:disabled {
+    background: #d1d5db;
+    cursor: not-allowed;
+    opacity: 0.6;
   }
 }
 

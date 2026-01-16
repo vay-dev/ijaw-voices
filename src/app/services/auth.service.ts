@@ -6,9 +6,10 @@ import { Observable, switchMap, tap } from 'rxjs';
 import { VerifyOtpRequestInterface } from '../interfaces/auth/verifyotp-request.interface';
 import { VerifyOtpResponseInterface } from '../interfaces/auth/verifyotp-response.interface';
 import { SignupResponseInterface } from '../interfaces/auth/signup-response.interface';
-import { User } from '../interfaces/user.interface';
+import { UserInterface } from '../interfaces/user.interface';
 import { BaseResponseInterface } from '../interfaces/base-response.interface';
 import { LoginRequestInterface } from '../interfaces/auth/login-request.interface';
+import { LoginResponseInterface } from '../interfaces/auth/login-response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -32,11 +33,11 @@ export class AuthService {
     });
   }
 
-  login(payload: LoginRequestInterface): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/auth/login/`, payload);
+  login(payload: LoginRequestInterface): Observable<LoginResponseInterface> {
+    return this.http.post<LoginResponseInterface>(`${this.apiUrl}/auth/login/`, payload);
   }
 
-  setTokensAndUser(accessToken: string, refreshToken: string, user: User): void {
+  setTokensAndUser(accessToken: string, refreshToken: string, user: UserInterface): void {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('user', JSON.stringify(user));
@@ -50,7 +51,7 @@ export class AuthService {
     return localStorage.getItem('refreshToken');
   }
 
-  getUser(): User | null {
+  getUser(): UserInterface | null {
     const userString = localStorage.getItem('user');
     if (userString) {
       try {
